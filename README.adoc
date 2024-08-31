@@ -107,3 +107,61 @@ function1/
 * Shared code in the `lib/` directory can include utilities, database connectors, or any logic used across multiple functions.
 
 This structure is particularly well-suited for microservices architectures and serverless applications, allowing for flexible and scalable backend development.
+
+
+
+
+The Lambda function should be structure as follows:
+
+
+== User Management
+
+CreateUserHandler: Handle user registration
+UpdateUserHandler: Update user profile information
+DeleteUserHandler: Handle account deletion
+
+== Post Management
+
+CreatePostHandler: Create new posts
+DeletePostHandler: Delete existing posts
+ListPostsHandler: Retrieve posts for a user's feed
+
+== Friend Management
+
+SendFriendRequestHandler: Send friend requests
+AcceptFriendRequestHandler: Accept incoming friend requests
+ListFriendsHandler: Retrieve a user's friend list
+
+== Notification
+
+SendNotificationHandler: Send notifications (e.g., friend requests, likes)
+ListNotificationsHandler: Retrieve a user's notifications
+
+== Analytics
+
+TrackUserActivityHandler: Log user actions for analytics
+GenerateUserInsightsHandler: Create insights based on user activity
+
+== Content Moderation
+
+ModerateContentHandler: Analyze and flag inappropriate content
+
+== Authentication
+
+AuthenticateUserHandler: Handle user login and token generation
+
+== Search
+
+SearchUsersHandler: Search for users
+SearchPostsHandler: Search for posts
+
+NOTE: Each of these functions would be implemented in its respective directory under the functions/ folder.
+
+
+== Benefits of This Structure
+This structure allows for:
+
+Separation of concerns
+Easy addition of new features
+Shared code reuse
+Independent deployment of functions
