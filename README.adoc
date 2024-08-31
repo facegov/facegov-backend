@@ -5,6 +5,15 @@
 <script>mermaid.initialize({startOnLoad:true});</script>
 ++++
 
+== License
+This project uses the "GNU Affero General Public License (AGPL) v3" license to:
+
+* Copyleft license that ensures derivatives stay open source
+* Requires source code to be available when distributing the software
+* Good for maintaining openness and preventing proprietary forks
+* Requires source code to be available to users interacting with the software over a network
+* Ensures openness even for cloud/SaaS deployments
+
 == Section with Mermaid Diagram
 
 [mermaid]
