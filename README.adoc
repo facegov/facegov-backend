@@ -1,0 +1,100 @@
+= facegov-backend
+
+++++
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({startOnLoad:true});</script>
+++++
+
+== Section with Mermaid Diagram
+
+[mermaid]
+....
+include::lambda-backend-structure.mermaid[]
+....
+
+This document explains the file and folder structure for a serverless backend project, typically used with AWS Lambda.
+
+== Project Structure
+
+[source]
+----
+facegov-backend/
+├── src/
+│   ├── functions/
+│   │   ├── function1/
+│   │   └── function2/
+│   ├── lib/
+│   └── tests/
+├── serverless.yml
+├── package.json
+├── .gitignore
+└── README.md
+----
+
+== Detailed Explanation
+
+=== Root Directory
+
+`facegov-backend/`:: The root directory of your backend project.
+
+=== Source Code
+
+`src/`:: Contains all the source code for your project.
+
+==== Functions
+
+`functions/`:: Each subdirectory here represents a separate Lambda function.
+
+===== Individual Functions
+
+`function1/` and `function2/`:: Individual Lambda functions.
+
+.Function Structure
+[source]
+----
+function1/
+├── index.js
+├── package.json
+├── node_modules/
+└── tests/
+    └── index.test.js
+----
+
+* `index.js`: The main file containing the Lambda function code.
+* `package.json`: Defines dependencies specific to this function.
+* `node_modules/`: Contains installed npm packages for this function.
+* `tests/`: Unit tests for this specific function.
+
+==== Shared Code
+
+`lib/`:: Shared code that can be used across multiple Lambda functions.
+
+==== Tests
+
+`tests/`:: Contains integration or end-to-end tests for your entire backend.
+
+=== Configuration Files
+
+`serverless.yml`:: Configuration file for the Serverless Framework. It defines your Lambda functions, API Gateway endpoints, and other AWS resources.
+
+`package.json`:: The main package file for your project. It lists dependencies and scripts for the entire backend.
+
+`.gitignore`:: Specifies files and directories that Git should ignore, like `node_modules/` and environment-specific files.
+
+`README.md`:: Documentation for your project, explaining how to set up, deploy, and use your backend.
+
+== Benefits of This Structure
+
+1. *Separation of Concerns*: Each function is isolated, allowing for independent development and deployment.
+2. *Shared Code*: The `lib/` directory allows you to share code between functions, reducing duplication.
+3. *Easy Testing*: With a dedicated `tests/` directory for each function and the project as a whole, you can ensure comprehensive test coverage.
+4. *Serverless-Ready*: This structure works well with the Serverless Framework, making deployment to AWS Lambda straightforward.
+5. *Scalability*: As your project grows, you can easily add more functions without cluttering the project structure.
+
+== Working with This Structure
+
+* Each Lambda function (`function1`, `function2`, etc.) is typically triggered by a specific event (e.g., an API Gateway request, an S3 event).
+* The `serverless.yml` file is crucial for defining how these functions are deployed and integrated with other AWS services.
+* Shared code in the `lib/` directory can include utilities, database connectors, or any logic used across multiple functions.
+
+This structure is particularly well-suited for microservices architectures and serverless applications, allowing for flexible and scalable backend development.
