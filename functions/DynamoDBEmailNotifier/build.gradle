@@ -1,0 +1,29 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation platform('com.amazonaws:aws-java-sdk-bom:1.12.529')
+    implementation 'com.amazonaws:aws-lambda-java-core:1.2.2'
+    implementation 'com.amazonaws:aws-lambda-java-events:3.11.1'
+    implementation 'com.amazonaws:aws-java-sdk-dynamodb:1.12.529'
+    implementation 'com.amazonaws:aws-java-sdk-ses:1.12.529'
+    testImplementation 'junit:junit:4.13.2'
+}
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+shadowJar {
+    manifest {
+        attributes 'Main-Class': 'com.facegov.app.registration_notifier.App'
+    }
+}
+
+build.dependsOn shadowJar

@@ -165,3 +165,26 @@ Separation of concerns
 Easy addition of new features
 Shared code reuse
 Independent deployment of functions
+
+
+== Testing the application
+
+From the API gateway try to the following request
+
+[source, json]
+----
+{
+  "username": "testuser",
+  "email": "test@example.com",
+  "password": "password123"
+}
+----
+
+
+From the Lambda request try the following reqeust:
+[source, json]
+----
+{
+  "body": "{\"username\":\"testuser\",\"email\":\"test@example.com\",\"password\":\"password123\"}"
+}
+----
