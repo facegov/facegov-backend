@@ -10,9 +10,9 @@ import com.amazonaws.services.simpleemail.model.*;
 
 public class App implements RequestHandler<DynamodbEvent, String> {
 
-    private static final String SENDER = "info@facegov.com";
+    private static final String SENDER = "FaceGov <info@facegov.com>";
     private static final String RECIPIENT = "puglieseweb@gmail.com";
-    private static final String SUBJECT = "New Facegov User Registration";
+    private static final String SUBJECT = "New User Registration";
 
     @Override
     public String handleRequest(DynamodbEvent event, Context context) {
