@@ -2,3 +2,8 @@
 !.idea/gradle.xml
 build
 .gradle
+
+.aws-sam/
+target/
+.idea/
+*.iml
