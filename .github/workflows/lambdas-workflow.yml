@@ -55,4 +55,10 @@ jobs:
     - name: Deploy to AWS Lambda
       run: |
         FUNCTION_NAME=$(echo "${{ matrix.function }}" | sed 's/\([A-Z]\)/-\1/g' | sed 's/^-//' | tr '[:upper:]' '[:lower:]')
-        aws lambda update-function-code --function-name $FUNCTION_NAME --zip-file fileb://$(ls *.jar)
+        JAR_FILE=$(ls *.jar | head -n 1)
+        if [ -n "$JAR_FILE" ]; then
+          aws lambda update-function-code --function-name $FUNCTION_NAME --zip-file fileb://$JAR_FILE
+        else
+          echo "No JAR file found for ${{ matrix.function }}"
+          exit 1
+        fi
