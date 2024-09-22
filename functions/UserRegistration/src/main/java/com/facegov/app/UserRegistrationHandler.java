@@ -13,6 +13,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Arrays;
+import java.util.List;
 
 public class UserRegistrationHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
@@ -20,6 +22,7 @@ public class UserRegistrationHandler implements RequestHandler<APIGatewayProxyRe
     private static final DynamoDbClient dynamoDb = DynamoDbClient.builder()
             .region(Region.US_EAST_1) // Replace with your region
             .build();
+    private static final List<String> ALLOWED_ORIGINS = Arrays.asList("https://www.facegov.com", "https://facegov.com");
 
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent input, Context context) {
@@ -31,7 +34,7 @@ public class UserRegistrationHandler implements RequestHandler<APIGatewayProxyRe
 
             if (input.getBody() == null || input.getBody().isEmpty()) {
                 logger.log("Facegov UserRegistration. Request body is missing or empty");
-                return createResponse(400, "Request body is missing or empty");
+                return createResponse(logger,400, "Request body is missing or empty", input.getHeaders());
             }
 
             String rawBody = input.getBody();
@@ -49,7 +52,7 @@ public class UserRegistrationHandler implements RequestHandler<APIGatewayProxyRe
             logger.log("Facegov UserRegistration. Parsed UserData: " + userData);
             if (isNullOrEmpty(userData.username) || isNullOrEmpty(userData.email) || isNullOrEmpty(userData.password)) {
                 logger.log("Facegov UserRegistration. Missing required fields");
-                return createResponse(400, "Missing required fields");
+                return createResponse(logger,400, "Missing required fields", input.getHeaders());
             }
 
             logger.log("Facegov UserRegistration. Preparing DynamoDB item");
@@ -68,23 +71,35 @@ public class UserRegistrationHandler implements RequestHandler<APIGatewayProxyRe
             dynamoDb.putItem(putItemRequest);
 
             logger.log("Facegov UserRegistration. Item successfully put in DynamoDB");
-            return createResponse(200, "User registered successfully");
+            return createResponse(logger, 200, "User registered successfully", input.getHeaders());
         } catch (Exception e) {
             logger.log("Facegov UserRegistration. Error: " + e.getMessage());
-            return createResponse(500, "Failed to register user: " + e.getMessage());
+            return createResponse(logger,500, "Failed to register user: " + e.getMessage(), input.getHeaders());
         }
     }
 
-    private APIGatewayProxyResponseEvent createResponse(int statusCode, String body) {
+    private APIGatewayProxyResponseEvent createResponse(LambdaLogger logger, int statusCode, String body, Map<String, String> requestHeaders) {
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
         response.setStatusCode(statusCode);
         response.setBody(gson.toJson(Map.of("message", "Facegov UserRegistration. " + body)));
 
         // Add CORS headers
         Map<String, String> headers = new HashMap<>();
-        headers.put("Access-Control-Allow-Origin", "https://facegov.com");
+
+        // Dynamically set Access-Control-Allow-Origin
+        String origin = requestHeaders.get("origin");
+        headers.put("Access-Control-Allow-Origin", origin);
+        if (ALLOWED_ORIGINS.contains(origin)) {
+            logger.log("Facegov UserRegistration. Origin: " + origin);
+        } else {
+            // If the origin is not in the allowed list, you might want to set a default
+            // or omit the header entirely, depending on your security requirements
+            headers.put("Access-Control-Allow-Origin", ALLOWED_ORIGINS.toString());
+        }
+
         headers.put("Access-Control-Allow-Headers", "Content-Type");
         headers.put("Access-Control-Allow-Methods", "POST");
+        headers.put("Vary", "Origin");
         response.setHeaders(headers);
         return response;
     }
